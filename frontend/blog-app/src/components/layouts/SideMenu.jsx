@@ -4,7 +4,7 @@ import {LuLogOut} from "react-icons/lu";
 import {useNavigate} from "react-router-dom";
 import CharAvatar from '../Cards/CharAvatar';
 
-const SideMenu = ({activeMenu, isBlogMenu}) => {
+const SideMenu = ({activeMenu, isBlogMenu, onClose}) => {
     const user = null;
     const navigate = useNavigate();
 
@@ -14,61 +14,76 @@ const SideMenu = ({activeMenu, isBlogMenu}) => {
             return;
         }
         navigate(route);
+        onClose?.(); // Close menu after navigation
     };
+    
     const handleLogout = () => {
         localStorage.clear();
         navigate("/");
+        onClose?.();
     };
+    
+    const menuData = isBlogMenu ? BLOG_NAVBAR_DATA : SIDE_MENU_DATA;
+    
   return (
-    <div className='w-64 h-[calc(100vh-61px)] bg-white border-r border-gray-200/50 p-5 sticky top-[61px] z-20'>
+    <div className='w-full h-full bg-white p-5'>
+        {/* User Profile Section */}
         {user && (
             <div className='flex flex-col items-center justify-center gap-1 mt-3 mb-7'>
                 {user?.profileImageUrl ? (
                     <img
-                        src={user?.profileImageUrl || ""}
-                        alt='Profile Image'
-                        className='w-20 h-20 bg-slate-400 rounded-full'
-                    ></img>
+                        src={user?.profileImageUrl}
+                        alt='Profile'
+                        className='w-20 h-20 bg-slate-400 rounded-full object-cover'
+                    />
                 ) : (
                     <CharAvatar
                         fullName={user?.name || ""}
                         width="w-20"
                         height="h-20"
                         style="text-xl"
-                    ></CharAvatar>
+                    />
                 )} 
                 <div>
                     <h5 className='text-gray-950 font-semibold text-center leading-6 mt-1'>
-                        {user.name || ""}
+                        {user.name}
                     </h5>
-                    <p className='text-[13px] font-medium text-gray=800 text-center'>
-                        {user?.email || ""}
+                    <p className='text-[13px] font-medium text-gray-800 text-center'>
+                        {user?.email}
                     </p>
                 </div>
             </div>
         )}
-        {(isBlogMenu ? BLOG_NAVBAR_DATA : SIDE_MENU_DATA).map((item,index) => {
-            <button
-                key={`menu_${index}`}
-                className={`w-full flex items-center gap-4 text-[15px] ${
-                    activeMenu == item.label
-                    ? "text-white bg-linear-to-r from-sky-500 to-cyan-400"
-                    : ""
-                } py-3 px-6 rounded-lg mb-3 cursor-pointer`}
-                onClick={() => handleClick(item.path)}
-            >
-                <item.icon className='text-xl' />
-                {item.label}
-            </button>
-        })}
+        
+        {/* Menu Items */}
+        <div className="space-y-2">
+            {menuData.map((item, index) => (
+                <button
+                    key={`menu_${index}`}
+                    className={`w-full flex items-center gap-4 text-[15px] ${
+                        activeMenu === item.label
+                        ? "text-white bg-gradient-to-r from-sky-500 to-cyan-400 shadow-md"
+                        : "text-gray-700 hover:bg-gray-100"
+                    } py-3 px-6 rounded-lg transition-all duration-200 cursor-pointer`}
+                    onClick={() => handleClick(item.path)}
+                >
+                    {item.icon && <item.icon className='text-xl' />}
+                    <span className="font-medium">{item.label}</span>
+                </button>
+            ))}
+        </div>
+        
+        {/* Logout Button */}
         {user && (
-            <button
-                className={`w-full flex items-center gap-4 text-[15px] py-3 px-6 rounded-lg mb-3 cursor-pointer`}
-                onClick={() => handleLogout()}
-            >
-                <LuLogOut className='text-xl' />
-                Logout
-            </button>
+            <div className="mt-8 pt-4 border-t border-gray-200">
+                <button
+                    className='w-full flex items-center gap-4 text-[15px] text-gray-700 hover:bg-red-50 hover:text-red-600 py-3 px-6 rounded-lg transition-colors cursor-pointer'
+                    onClick={handleLogout}
+                >
+                    <LuLogOut className='text-xl' />
+                    <span className="font-medium">Logout</span>
+                </button>
+            </div>
         )}
     </div>
   )
