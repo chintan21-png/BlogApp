@@ -14,7 +14,7 @@ const SideMenu = ({activeMenu, isBlogMenu, onClose}) => {
             return;
         }
         navigate(route);
-        onClose?.(); // Close menu after navigation
+        onClose?.(); 
     };
     
     const handleLogout = () => {
@@ -27,7 +27,7 @@ const SideMenu = ({activeMenu, isBlogMenu, onClose}) => {
     
   return (
     <div className='w-full h-full bg-white p-5'>
-        {/* User Profile Section */}
+       
         {user && (
             <div className='flex flex-col items-center justify-center gap-1 mt-3 mb-7'>
                 {user?.profileImageUrl ? (
@@ -55,7 +55,7 @@ const SideMenu = ({activeMenu, isBlogMenu, onClose}) => {
             </div>
         )}
         
-        {/* Menu Items */}
+        
         <div className="space-y-2">
             {menuData.map((item, index) => (
                 <button
@@ -73,7 +73,7 @@ const SideMenu = ({activeMenu, isBlogMenu, onClose}) => {
             ))}
         </div>
         
-        {/* Logout Button */}
+        
         {user && (
             <div className="mt-8 pt-4 border-t border-gray-200">
                 <button
