@@ -53,23 +53,107 @@ const updatePost = async (req,res) => {
 };
 
 const deletePost = async (req,res) => {
+    try{
+        const post = await BlogPost.findById(req.params.id);
+        if(!post) return res.status(404).json({message:"Page Not Found"});
+
+        await post.deleteOne();
+        res.json({message:"Post Deleted"});
+    }
+    catch(err) {
+        res.status(500).json({message:"Server Error", error:err.message});
+    }
 
 };
 
 const getAllPosts = async (req,res) => {
+    try{
+        const status = req.query.status || "published";
+        const page = parseInt(req.query.page) || 1;
+        const limit = 5;
+        const skip = (page-1)* limit;
+
+        //Determine filter for main posts response
+        let filter = {};
+        if(status === "published") filter.isDraft = false;
+        else if (status === "draft") filter.isDraft = true;
+
+        //Fetch paginated posts
+        const posts = await BlogPost.find(filter)
+        .populate("author", "name profileImageUrl")
+        .sort({ updatedAt : -1})
+        .skip(skip)
+        .limit(limit);
+
+        //count totals for pagination and tab counts
+
+        const [totalCount, allCount, publishedCount, draftCount] = await Promise.all([
+            BlogPost.countDocuments(filter),
+            BlogPost.countDocuments(),
+            BlogPost.countDocuments({isDraft: false}),
+            BlogPost.countDocuments({isDraft: true}),
+        ]);
+        res.json({
+            posts,
+            page,
+            totalPages: Math.ceil(totalCount / limit),
+            totalCount,
+            counts: {
+                all : allCount,
+                published: publishedCount,
+                draft: draftCount,
+            },
+        })
+    }
+    catch(err) {
+        res.status(500).json({message:"Server Error", error: err.message});
+    }
 
 };
 
 const getPostBySlug = async (req,res) => {
-
+    try {
+        const post = await BlogPost.findOne({slug: req.params.slug}).populate(
+            "author",
+            "name profileImageUrl"
+        );
+        if(!post) return res.status(404).json({message:"Post Not Found"});
+        res.json(post);
+    }
+    catch(err) {
+        res.status(500).json({message:"Server Error", error: err.message});
+    }
 };
 
 const getPostByTag = async (req,res) => {
+    try{
+        const posts = await BlogPost.find({
+            tags: req.params.tag,
+            isDraft: false,
+        }).populate("author", "name profileImageUrl");
+        res.json(posts)
+    }
+    catch (err) {
+        res.status(500).json({message: "Server Error", error: err.message});
+    }
 
 };
 
 const searchPosts = async (req,res) => {
-
+    try {
+        const q = req.query.q;
+        const posts = await BlogPost.find({
+            isDraft: false,
+            $or : [
+                {title:{ $regex:q, $options: "i"}},
+                {content: {$regex:q, $options: "i"}},
+            ],
+        }).populate("author", "name profileImageUrl");
+        res.json(posts);
+    }
+    catch(err) {
+        res.status(500).json({message:"Server error", error: err.message});
+    }
 };
 
 const incrementView = async (req,res) => {
