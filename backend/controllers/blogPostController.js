@@ -26,6 +26,29 @@ const createPost = async (req,res) => {
 };
 
 const updatePost = async (req,res) => {
+    try {
+        const post = await BlogPost.findById(req.params.id);
+        if(!post) return res.status(404).json({message: "Post not Found"});
+
+        if (post.author.toString() !== req.user._id.toString() && !req.user.isAdmin) {
+            return res.status(403).json({message: "Not Authorized to update this post"})
+        }
+        const updatedData = req.body;
+        if(updatedData.title) {
+            updatedData.slug = updatedData.title
+            .toLowerCase().replace(/ /g, "-").replace(/[^\w-]+/g, "");
+        }
+
+        const updatedPost = await BlogPost.findByIdAndUpdate(
+            req.params.id,
+            updatedData,
+            {new: true}
+        );
+        res.json(updatedPost);
+    }
+    catch(err) {
+        res.status(500).json({message:"Server Error", error: err.message});
+    }
 
 };
 
