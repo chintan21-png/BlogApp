@@ -157,14 +157,37 @@ const searchPosts = async (req,res) => {
 };
 
 const incrementView = async (req,res) => {
+    try {
+        await BlogPost.findByIdAndUpdate(req.params.id, { $inc: {views:1}});
+        res.json({message: "View count incremented"});
+    }
+    catch(err) {
+        res.json(500).json({message:"Server Error", error:err.message});
+    }
 
 };
 
 const likePost = async (req,res) => {
+    try{
+        await BlogPost.findByIdAndUpdate(req.params.id, { $inc: { likes:1}});
+        res.json({message:"Like added"});
+    }
+    catch(err) {
+        res.status(500).json({message:"Server error", error:err.message});
+    }
 
 };
 
 const getTopPosts = async (req,res) => {
+    try {
+        const posts = await BlogPost.find({isDraft:false})
+        .sort({views:-1, likes:-1})
+        .limit(5);
+        res.json(posts);
+    }
+    catch(err) {
+        res.status(500).json({message:"Server Error", error:err.message});
+    }
 
 };
 
