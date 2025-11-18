@@ -60,7 +60,7 @@ const getCommentsByPost = async (req,res) => {
     try {
          const { postId } = req.params;
 
-        // Ensure post exists
+     
         const post = await BlogPost.findById(postId);
         if (!post) {
             return res.status(404).json({ message: "Post Not Found" });
@@ -70,7 +70,7 @@ const getCommentsByPost = async (req,res) => {
             .populate("author", "name profileImageUrl")
             .sort({ createdAt: 1 });
 
-        // Build nested structure
+       
         const commentMap = {};
         comments.forEach(comment => {
             comment = comment.toObject();
@@ -104,15 +104,14 @@ const deleteComment = async (req,res) => {
             return res.status(404).json({ message: "Comment not found" });
         }
 
-        // Authorization: user must be owner OR admin
         if (comment.author.toString() !== req.user._id.toString() && !req.user.isAdmin) {
             return res.status(403).json({ message: "Not authorized to delete this comment" });
         }
 
-        // Delete the comment
+       
         await Comment.findByIdAndDelete(commentId);
 
-        // Delete all child replies recursively
+      
         await Comment.deleteMany({ parentComment: commentId });
 
         res.json({ message: "Comment deleted successfully" });
