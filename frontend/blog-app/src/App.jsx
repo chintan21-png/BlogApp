@@ -10,9 +10,11 @@ import Dashboard from "./pages/Admin/components/Dashboard";
 import BlogPosts from "./pages/Admin/components/BlogPosts";
 import BlogPostEditor from "./pages/Admin/components/BlogPostEditor";
 import Comments from "./pages/Admin/components/Comments";
+import UserProvider from "./context/userContext";
 
 const App = () => {
   return (
+    <UserProvider>
     <div>
       <Router>
         <Routes>
@@ -43,6 +45,7 @@ const App = () => {
         }}
       ></Toaster>
     </div>
+    </UserProvider>
   )
 }
 
