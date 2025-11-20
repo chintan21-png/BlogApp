@@ -12,7 +12,6 @@ const Login = ({ setCurrentPage }) => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  
   const { updateUser, setOpenAuthForm } = useContext(UserContext);
   const navigate = useNavigate();
 
@@ -31,78 +30,93 @@ const Login = ({ setCurrentPage }) => {
 
     setError("");
 
-    //Login API
+    // Login API
     try {
       const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
         email,
         password,
-      })
+      });
 
-      const {token, role} = response.data;
+      const { token, role } = response.data;
 
       if(token) {
         localStorage.setItem("token", token);
         updateUser(response.data);
 
-        //Redirect based on role
+        // Redirect based on role
         if(role === "admin") {
-          setOpenAuthForm(false)
+          setOpenAuthForm(false);
           navigate("/admin/dashboard");
+        } else {
+          setOpenAuthForm(false);
+          navigate("/");
         }
-        setOpenAuthForm(false)
       }
-    }
-    catch(error) {
+    } catch(error) {
       if(error.response && error.response.data.message) {
         setError(error.response.data.message);
-      }
-      else {
+      } else {
         setError("Something went wrong. Please try again.");
       }
     }
   };
 
   return (
-    <div className='flex items-center'>
-      <div className='w-[90vw] md:w-[33vw] p-7 flex flex-col justify-center'>
-        <h3 className='text-lg font-semibold text-black'>Welcome Back</h3>
-        <p className='text-xs text-slate-700 mt-0.5 mb-6'>
+    <div className='flex flex-col md:flex-row w-full h-full'>
+      {/* Form Section */}
+      <div className='w-full md:w-1/2 p-8 flex flex-col justify-center'>
+        <h3 className='text-xl font-semibold text-black'>Welcome Back</h3>
+        <p className='text-xs text-slate-700 mt-1 mb-6'>
           Please enter your details to log in
         </p>
-        <form onSubmit={handleLogin}>
-          <Input
-            value={email}
-            onChange={({ target }) => setEmail(target.value)}
-            label="Email Address"
-            placeholder="john@example.com"
-            type="text"
-          />
-          <Input
-            value={password}
-            onChange={({ target }) => setPassword(target.value)}
-            label="Password"
-            placeholder="Min 8 Character"
-            type="password"
-          />
-          {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
-          <button type='submit' className='btn-primary'>Login</button>
-          <p className='text-[13px] text-slate-800 mt-3'>Dont have an account ?{" "}
+        
+        <form onSubmit={handleLogin} className='space-y-4'>
+          <div className="space-y-4">
+            <Input
+              value={email}
+              onChange={({ target }) => setEmail(target.value)}
+              label="Email Address"
+              placeholder="john@example.com"
+              type="text"
+            />
+            <Input
+              value={password}
+              onChange={({ target }) => setPassword(target.value)}
+              label="Password"
+              placeholder="Min 8 Character"
+              type="password"
+            />
+          </div>
+          
+          {error && <p className='text-red-500 text-xs py-2'>{error}</p>}
+          
+          <button type='submit' className='btn-primary w-full mt-6'>
+            Login
+          </button>
+          
+          <p className='text-[13px] text-slate-800 mt-3 text-center'>
+            Don't have an account?{" "}
             <button
+              type="button"
               className='font-medium text-primary underline cursor-pointer'
-              onClick={() => {
-                setCurrentPage("signup");
-              }}
+              onClick={() => setCurrentPage("signup")}
             >
               SignUp
             </button>
           </p>
         </form>
       </div>
-      <div className='hidden md:block'>
-        <img src={AUTH_IMG} alt='Login' className='h-[400px]' />
+
+      {/* Image Section - Fixed size to match SignUp */}
+      <div className='hidden md:flex md:w-1/2 items-center justify-center bg-gray-100'>
+        <img 
+          src={AUTH_IMG} 
+          alt='Login' 
+          className='w-full h-[500px] object-cover rounded-lg'
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
