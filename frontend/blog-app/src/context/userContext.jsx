@@ -46,12 +46,18 @@ const UserProvider = ({ children }) => {
 
     const clearUser = () => {
         setUser(null);
-        setSearchResults([])
         localStorage.removeItem("token");
     };
 
     return (
-        <UserContext.Provider value={{ user, loading, updateUser, clearUser, openAuthForm, setOpenAuthForm }}>
+        <UserContext.Provider value={{ 
+            user, 
+            loading, 
+            updateUser, 
+            clearUser, 
+            openAuthForm, 
+            setOpenAuthForm 
+        }}>
             {children}
         </UserContext.Provider>
     );
