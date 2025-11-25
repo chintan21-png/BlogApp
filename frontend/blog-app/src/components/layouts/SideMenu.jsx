@@ -1,11 +1,12 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { BLOG_NAVBAR_DATA, SIDE_MENU_DATA } from '../../utils/data';
 import {LuLogOut} from "react-icons/lu";
 import {useNavigate} from "react-router-dom";
 import CharAvatar from '../Cards/CharAvatar';
+import { UserContext } from '../../context/userContext';
 
-const SideMenu = ({activeMenu, isBlogMenu, onClose}) => {
-    const user = null;
+const SideMenu = ({activeMenu, isBlogMenu, setOpenSideMenu}) => {
+    const { user, setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
     const handleClick = (route) => {
@@ -13,14 +14,17 @@ const SideMenu = ({activeMenu, isBlogMenu, onClose}) => {
             handleLogout();
             return;
         }
+        setOpenSideMenu((prevState) => !prevState);
         navigate(route);
-        onClose?.(); 
+        
     };
     
     const handleLogout = () => {
         localStorage.clear();
+        setUser(null);
+        setOpenSideMenu((prevState) => !prevState);
         navigate("/");
-        onClose?.();
+        
     };
     
     const menuData = isBlogMenu ? BLOG_NAVBAR_DATA : SIDE_MENU_DATA;

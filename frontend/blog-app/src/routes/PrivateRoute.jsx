@@ -1,9 +1,10 @@
-import React, { useCallback } from 'react'
+import React, { useContext } from 'react'
 import { UserContext } from '../context/userContext'
 import { Navigate, Outlet } from 'react-router-dom';
 
 const PrivateRoute = ({allowedRoles}) => {
-  const {user, loading} = useCallback(UserContext);
+ const { user, loading } = useContext(UserContext);
+
 
   if(loading) {
     return <div>Loading...</div>;

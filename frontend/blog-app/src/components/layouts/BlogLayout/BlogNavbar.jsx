@@ -38,7 +38,7 @@ const BlogNavbar = ({activeMenu}) => {
                   <img 
                     src={Logo} 
                     alt='logo' 
-                    className='h-12 w-auto md:h-14 object-contain'
+                    className='h-50 w-auto md:h-30 object-contain'
                     onError={(e) => {
                       e.target.style.display = 'none';
                     }}
@@ -101,7 +101,7 @@ const BlogNavbar = ({activeMenu}) => {
               <SideMenu 
                 activeMenu={activeMenu} 
                 isBlogMenu 
-                onClose={() => setOpenSideMenu(false)}
+                setOpenSideMenu= {setOpenSideMenu}
               />
             </div>
           </div>
