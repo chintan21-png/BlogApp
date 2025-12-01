@@ -1,3 +1,4 @@
+// UserProvider.jsx - Remove navigation hooks
 import React, { createContext, useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosinstance';
 import { API_PATHS } from '../utils/apiPaths';
@@ -14,12 +15,6 @@ const UserProvider = ({ children }) => {
         
         // If no token exists, skip fetching user
         if (!accessToken) {
-            setLoading(false);
-            return;
-        }
-
-        // If user already exists, skip fetching
-        if (user) {
             setLoading(false);
             return;
         }
@@ -41,7 +36,9 @@ const UserProvider = ({ children }) => {
 
     const updateUser = (userData) => {
         setUser(userData);
-        localStorage.setItem("token", userData.token);
+        if (userData.token) {
+            localStorage.setItem("token", userData.token);
+        }
     };
 
     const clearUser = () => {
@@ -52,7 +49,7 @@ const UserProvider = ({ children }) => {
     return (
         <UserContext.Provider value={{ 
             user, 
-            setUser,
+            setUser: updateUser,
             loading, 
             updateUser, 
             clearUser, 
