@@ -77,29 +77,29 @@ const Dashboard = () => {
               icon={<LuGalleryVerticalEnd className='text-lg' />}
               label='Total Posts'
               value={dashboardData?.stats?.totalPosts || 0}
-              bgColor="bg-blue-50"
-              color="text-blue-600"
+              bgColor="bg-sky-100/60"
+              color="text-sky-500"
             />
             <DashboardSummaryCard
               icon={<LuCheckCheck className='text-lg' />}
               label="Published"
               value={dashboardData?.stats?.published || 0}
-              bgColor="bg-green-50"
-              color="text-green-600"
+              bgColor="bg-sky-100/60"
+              color="text-sky-500"
             />
             <DashboardSummaryCard
               icon={<LuChartLine className='text-lg' />}
               label="Total Views"
               value={dashboardData?.stats?.totalViews || 0}
-              bgColor="bg-purple-50"
-              color="text-purple-600"
+              bgColor="bg-sky-100/60"
+              color="text-sky-500"
             />
             <DashboardSummaryCard
               icon={<LuHeart className='text-lg' />}
               label="Total Likes"
               value={dashboardData?.stats?.totalLikes || 0}
-              bgColor="bg-pink-50"
-              color="text-pink-600"
+              bgColor="bg-sky-100/60"
+              color="text-sky-500"
             />
           </div>
         </div>
