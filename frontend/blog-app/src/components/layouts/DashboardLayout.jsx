@@ -1,4 +1,4 @@
-// DashboardLayout.jsx - Fixed
+
 import React, { useContext } from 'react'
 import { UserContext } from '../../context/userContext'
 import SideMenu from './SideMenu';
@@ -12,13 +12,16 @@ const DashboardLayout = ({ children, activeMenu}) => {
       <Navbar activeMenu={activeMenu}/>
       
       {user && (
-        <div className='flex'>
-         
-          <div className='hidden lg:block w-64 min-w-64 bg-white shadow-sm'>
-            <SideMenu activeMenu={activeMenu} setOpenSideMenu={() => {}}/>
-          </div>
+        <div className='flex pt-16'>
         
-          <div className='flex-1 p-6'>
+          <div className='hidden lg:block w-64 min-w-64 h-screen sticky top-0 bg-white border-r border-gray-200'>
+            <div className='h-full overflow-y-auto'>
+              <SideMenu activeMenu={activeMenu} setOpenSideMenu={() => {}}/>
+            </div>
+          </div>
+          
+        
+          <div className='flex-1 p-6 overflow-x-hidden'>
             {children}
           </div>
         </div>

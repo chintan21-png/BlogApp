@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react'
 import { HiOutlineMenu, HiOutlineX } from 'react-icons/hi';
 import LOGO from "../../assets/logo.svg";
@@ -8,7 +9,8 @@ const Navbar = ({activeMenu}) => {
     
     return (
         <>
-            <div className='flex items-center gap-4 bg-white border-b border-gray-200 py-4 px-6 sticky top-0 z-30'>
+           
+            <div className='flex items-center gap-4 bg-white border-b border-gray-200 py-4 px-6 fixed top-0 left-0 right-0 z-50 h-16'>
                 <button
                     className='block lg:hidden text-black'
                     onClick={() => setOpenSideMenu(!openSideMenu)}
@@ -19,19 +21,19 @@ const Navbar = ({activeMenu}) => {
                         <HiOutlineMenu className='text-2xl'/>
                     )}
                 </button>
-                <img src={LOGO} alt='logo' className='h-10 w-auto'/>
+                <img src={LOGO} alt='logo' className='h-8 w-auto'/>
             </div>
             
-          
+           
             {openSideMenu && (
-                <div className='fixed inset-0 z-40 lg:hidden'>
+                <div className='fixed inset-0 z-40 lg:hidden mt-16'>
                    
                     <div 
                         className='absolute inset-0 bg-black bg-opacity-50'
                         onClick={() => setOpenSideMenu(false)}
                     />
-                    
-                    <div className='absolute left-0 top-0 h-full w-64 bg-white shadow-lg'>
+                  
+                    <div className='absolute left-0 top-0 h-full w-64 bg-white shadow-lg mt-16'>
                         <SideMenu 
                             activeMenu={activeMenu} 
                             setOpenSideMenu={setOpenSideMenu}

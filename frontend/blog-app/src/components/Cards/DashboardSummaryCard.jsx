@@ -1,14 +1,20 @@
 import React from 'react'
 
-const DashboardSummaryCard = ({icon, label, value, bgColor, color}) => {
+
+const DashboardSummaryCard = ({ icon, label, value, bgColor, color }) => {
   return (
-    <div className=''>
-        <div className={`w-10 md:w-8 h-10 md:h-8 flex items-center justify-center ${color} ${bgColor} rounded-sm`}>
+    <div className='bg-white p-4 rounded-xl border border-gray-200 shadow-sm'>
+      <div className='flex items-center justify-between'>
+        <div className={`p-2 rounded-lg ${bgColor || 'bg-sky-100'}`}>
+          <div className={`text-xl ${color || 'text-sky-500'}`}>
             {icon}
+          </div>
         </div>
-        <p className='text-xs md:text-[14px] text-gray-500'>
-            <span className='text-sm md:text-[15px] text-black font-semibold'>{value}</span>{" "} {label}
-        </p>
+        <div className='text-right'>
+          <h3 className='text-2xl font-bold text-gray-800'>{value}</h3>
+          <p className='text-xs text-gray-500 mt-1'>{label}</p>
+        </div>
+      </div>
     </div>
   )
 }

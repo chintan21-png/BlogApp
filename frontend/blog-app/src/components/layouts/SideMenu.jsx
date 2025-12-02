@@ -1,3 +1,4 @@
+
 import React, { useContext } from 'react'
 import { BLOG_NAVBAR_DATA, SIDE_MENU_DATA } from '../../utils/data';
 import {LuLogOut} from "react-icons/lu";
@@ -32,10 +33,10 @@ const SideMenu = ({activeMenu, isBlogMenu, setOpenSideMenu}) => {
     const menuData = isBlogMenu ? BLOG_NAVBAR_DATA : SIDE_MENU_DATA;
     
     return (
-        <div className='w-full h-full bg-white p-6 flex flex-col'>
-            
+        <div className='w-full h-full bg-white flex flex-col'>
+            {/* User Profile Section */}
             {user && (
-                <div className='flex flex-col items-center gap-3 mb-8'>
+                <div className='flex flex-col items-center gap-3 mb-8 px-6 pt-8'>
                     {user?.profileImageUrl ? (
                         <img
                             src={user?.profileImageUrl}
@@ -61,8 +62,8 @@ const SideMenu = ({activeMenu, isBlogMenu, setOpenSideMenu}) => {
                 </div>
             )}
             
-          
-            <div className="space-y-2 flex-1">
+        
+            <div className="space-y-2 flex-1 px-6">
                 {menuData.map((item, index) => (
                     <button
                         key={`menu_${index}`}
@@ -79,9 +80,9 @@ const SideMenu = ({activeMenu, isBlogMenu, setOpenSideMenu}) => {
                 ))}
             </div>
             
-          
+           
             {user && (
-                <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="mt-3 pt-3 border-t border-gray-200 px-6 pb-6">
                     <button
                         className='w-full flex items-center gap-3 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 py-2.5 px-4 rounded-lg transition-colors cursor-pointer'
                         onClick={handleLogout}
