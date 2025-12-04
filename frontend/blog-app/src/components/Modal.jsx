@@ -1,11 +1,20 @@
 import React from 'react'
 
-const Modal = ({children, isOpen, onClose, title, hideHeader}) => {
+const Modal = ({children, isOpen, onClose, title, hideHeader, size = 'md'}) => {
     if(!isOpen) return null;
+    
+    // Size classes for different modal sizes
+    const sizeClasses = {
+        sm: 'max-w-md',
+        md: 'max-w-lg',
+        lg: 'max-w-2xl',
+        xl: 'max-w-4xl',
+        full: 'max-w-full mx-4'
+    };
     
     return (
         <div className='fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-black/40'>
-            <div className='relative flex flex-col bg-white shadow-lg rounded-lg overflow-hidden max-w-4xl w-full max-h-[90vh]'>
+            <div className={`relative flex flex-col bg-white shadow-lg rounded-lg overflow-hidden ${sizeClasses[size]} w-full m-4 max-h-[90vh]`}>
                 {!hideHeader && (
                     <div className='flex items-center justify-between p-4 border-b border-gray-200'>
                         <h3 className='md:text-lg font-medium text-gray-900'>{title}</h3>
@@ -13,7 +22,7 @@ const Modal = ({children, isOpen, onClose, title, hideHeader}) => {
                 )}
                 <button
                     type='button'
-                    className='text-gray-400 bg-transparent hover:bg-sky-100 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center absolute top-3.5 right-3.5 cursor-pointer z-10'
+                    className='text-gray-400 bg-transparent hover:bg-gray-100 hover:text-gray-900 rounded-lg text-sm w-8 h-8 flex justify-center items-center absolute top-3.5 right-3.5 cursor-pointer z-10'
                     onClick={onClose}
                 >
                     <svg
