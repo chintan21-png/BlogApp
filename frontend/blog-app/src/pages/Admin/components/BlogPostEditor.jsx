@@ -9,6 +9,7 @@ import {
   LuTrash2,
 } from "react-icons/lu";
 import { useNavigate, useParams } from 'react-router-dom';
+import CoverImageSelector from '../../../components/Inputs/CoverImageSelector';
 
 
 const BlogPostEditor = (isEdit) => {
@@ -120,6 +121,14 @@ const BlogPostEditor = (isEdit) => {
                 value={postData.title}
                 onChange={({target}) => handleValueChange("title", target.value)}
               ></input>
+            </div>
+            <div className='mt-4'>
+              <CoverImageSelector 
+                image={postData.coverImageUrl}
+                setImage={(value) => handleValueChange("coverImageUrl", value)}
+                preview={postData.coverPreview}
+                setPreview={(value) => handleValueChange("coverPreview", value)}
+              />
             </div>
           </div>
         </div>
