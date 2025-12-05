@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../../components/layouts/DashboardLayout'
-import MDEditor, { commands, orderedListCommand } from "@uiw/react-md-editor";
+import MDEditor, { commands } from "@uiw/react-md-editor";
 import {
   LuLoaderCircle,
   LuSave,
@@ -10,9 +10,13 @@ import {
 } from "react-icons/lu";
 import { useNavigate, useParams } from 'react-router-dom';
 import CoverImageSelector from '../../../components/Inputs/CoverImageSelector';
+import TagInput from '../../../components/Inputs/TagInput';
+import axiosInstance from '../../../utils/axiosinstance';
+import { API_PATHS } from '../../../utils/apiPaths';
+import SkeletonLoader from '../../../components/Loader/SkeletonLoader';
+import BlogPostIdeaCard from '../../../components/Cards/BlogPostIdeaCard';
 
-
-const BlogPostEditor = (isEdit) => {
+const BlogPostEditor = ({ isEdit = false }) => {
   const navigate = useNavigate();
   const { postSlug = ""} = useParams();
   const [postData, setPostData] = useState({
@@ -43,6 +47,25 @@ const BlogPostEditor = (isEdit) => {
 
   //Generate Blog Post Idea Using AI
   const generatePostIdeas = async () => {
+    try {
+      const aiResponse = await axiosInstance.post(
+        API_PATHS.AI.GENERATE_BLOG_POST_IDEAS, 
+        {
+          topics: "React JS, Next JS, Node JS, React UI Components",
+        }
+      );
+      const generatedIdeas = aiResponse.data;
+
+      if(generatedIdeas?.length > 0) {
+        setPostIdeas(generatedIdeas);
+      }
+    }
+    catch(error) {
+      console.log("Something went wrong. Please try again.", error);
+    }
+    finally {
+      setIdeaLoading(false);
+    }
 
   };
 
@@ -70,6 +93,7 @@ const BlogPostEditor = (isEdit) => {
     }
     return () => {};
   },[]);
+  
   return (
     <DashboardLayout activeMenu='Blog Posts'>
       <div className='my-5'>
@@ -111,6 +135,7 @@ const BlogPostEditor = (isEdit) => {
               </div>
             </div>
             {error && <p className='text-red-500 text-xs pb-2.5'>{error}</p>}
+
             <div className='mt-4'>
               <label className='text-xs font-medium text-slate-600'>
                 Post Title
@@ -158,7 +183,51 @@ const BlogPostEditor = (isEdit) => {
                 />
               </div>
             </div>
+            <div className='mt-3'>
+              <label className='text-xs font-medium text-slate-600'>Tags</label>
+              <TagInput
+                tags={postData?.tags || []}
+                setTags={(data) => {
+                  handleValueChange("tags",data)
+                }}
+              />
+            </div>
           </div>
+
+          {/* Right sidebar - Only show for new posts */}
+          {!isEdit && (
+            <div className='form-card col-span-12 md:col-span-4 p-0'>
+              <div className='flex items-center justify-between px-6 pt-6'>
+                <h4 className='text-sm md:text-base font-medium inline-flex items-center gap-2'>
+                  <span className='text-sky-600'>
+                    <LuSparkles />
+                  </span>
+                  Ideas for your next post
+                </h4>
+                <button className='bg-gradient-to-r from-sky-500 to-cyan-400 text-[13px] font-semibold text-white px-3 py-1 rounded hover:bg-black hover:text-white transition-colors cursor-pointer hover:shadow-2xl hover:shadow-sky-200' onClick={() => setOpenBlogPostGenForm({open:true, data:null})}>
+                  Generate New
+                </button>
+              </div>
+              <div>
+                {ideaLoading ? (
+                  <div className='p-5'>
+                    <SkeletonLoader />
+                  </div>
+                ) : (
+                  postIdeas.map((idea, index) => (
+                    <BlogPostIdeaCard
+                      key={`idea_${index}`}
+                      title={idea.title || ""}
+                      description={idea.description || ""}
+                      tags={idea.tags || []}
+                      tone={idea.tone || "casual"}
+                      onSelect={() => setOpenBlogPostGenForm({ open: true, data: idea})}
+                    />
+                  ))
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </DashboardLayout>
