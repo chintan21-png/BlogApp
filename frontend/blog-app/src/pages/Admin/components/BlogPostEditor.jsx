@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import DashboardLayout from '../../../components/layouts/DashboardLayout'
-import MDEditor, { commands } from "@uiw/react-md-editor";
+import MDEditor, { commands, orderedListCommand } from "@uiw/react-md-editor";
 import {
   LuLoaderCircle,
   LuSave,
@@ -129,6 +129,34 @@ const BlogPostEditor = (isEdit) => {
                 preview={postData.coverPreview}
                 setPreview={(value) => handleValueChange("coverPreview", value)}
               />
+            </div>
+            <div className='mt-3'>
+              <label className='text-xs font-medium text-slate-600'>
+                Content
+              </label>
+              <div data-color-mode="light" className='mt-3'>
+                <MDEditor 
+                  value={postData.content}
+                  onChange={(data) => {
+                    handleValueChange("content", data);
+                  }}
+                  commands={[
+                    commands.bold,
+                    commands.italic,
+                    commands.strikethrough,
+                    commands.hr,
+                    commands.title,
+                    commands.divider,
+                    commands.link,
+                    commands.code,
+                    commands.image,
+                    commands.unorderedListCommand,
+                    commands.orderedListCommand,
+                    commands.checkedListCommand,
+                  ]}
+                  hideMenu={true}
+                />
+              </div>
             </div>
           </div>
         </div>
