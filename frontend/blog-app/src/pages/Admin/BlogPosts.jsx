@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import DashboardLayout from "../../../components/layouts/DashboardLayout";
+import DashboardLayout from "@/components/layouts/DashboardLayout";
 import { LuGalleryVerticalEnd, LuLoaderCircle, LuPlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
-import axiosInstance from "../../../utils/axiosinstance";
-import { API_PATHS } from "../../../utils/apiPaths";
+import axiosInstance from "@/utils/axiosinstance";
+import { API_PATHS } from "@/utils/apiPaths";
 import toast from "react-hot-toast";
-import Modal from "../../../components/Modal";
-import Tabs from "../../../components/Tabs";
+import Modal from "@/components/Modal";
+import Tabs from "@/components/Tabs";
 import moment from "moment";
-import BlogPostSummaryCard from "../../../components/Cards/BlogPostSummaryCard";
-import DeleteAlertContent from "../../../components/DeleteAlertContent";
+import BlogPostSummaryCard from "@/components/Cards/BlogPostSummaryCard";
+import DeleteAlertContent from "@/components/DeleteAlertContent";
 
 const BlogPosts = () => {
   const navigate = useNavigate();

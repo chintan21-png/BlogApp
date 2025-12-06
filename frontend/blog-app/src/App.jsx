@@ -4,12 +4,12 @@ import BlogLandingPage from "./pages/Blog/components/BlogLandingPage";
 import BlogPostView from "./pages/Blog/components/BlogPostView";
 import PostByTags from "./pages/Blog/components/PostByTags";
 import SearchPosts from "./pages/Blog/components/SearchPosts";
-import AdminLogin from "./pages/Admin/components/AdminLogin";
+import AdminLogin from "./pages/Admin/AdminLogin";
 import PrivateRoute from "./routes/PrivateRoute";
-import Dashboard from "./pages/Admin/components/Dashboard";
-import BlogPosts from "./pages/Admin/components/BlogPosts";
-import BlogPostEditor from "./pages/Admin/components/BlogPostEditor";
-import Comments from "./pages/Admin/components/Comments";
+import Dashboard from "./pages/Admin/Dashboard";
+import BlogPosts from "./pages/Admin/BlogPosts";
+import BlogPostEditor from "./pages/Admin/BlogPostEditor";
+import Comments from "./pages/Admin/Comments";
 import UserProvider from "./context/userContext";
 
 const App = () => {

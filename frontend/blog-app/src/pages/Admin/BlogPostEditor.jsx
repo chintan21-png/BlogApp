@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import DashboardLayout from '../../../components/layouts/DashboardLayout'
+import DashboardLayout from '@/components/layouts/DashboardLayout'
 import MDEditor, { commands } from "@uiw/react-md-editor";
 import {
   LuLoaderCircle,
@@ -9,12 +9,14 @@ import {
   LuTrash2,
 } from "react-icons/lu";
 import { useNavigate, useParams } from 'react-router-dom';
-import CoverImageSelector from '../../../components/Inputs/CoverImageSelector';
-import TagInput from '../../../components/Inputs/TagInput';
-import axiosInstance from '../../../utils/axiosinstance';
-import { API_PATHS } from '../../../utils/apiPaths';
-import SkeletonLoader from '../../../components/Loader/SkeletonLoader';
-import BlogPostIdeaCard from '../../../components/Cards/BlogPostIdeaCard';
+import CoverImageSelector from '@/components/Inputs/CoverImageSelector';
+import TagInput from '@/components/Inputs/TagInput';
+import axiosInstance from '@/utils/axiosinstance';
+import { API_PATHS } from '@/utils/apiPaths';
+import SkeletonLoader from '@/components/Loader/SkeletonLoader';
+import BlogPostIdeaCard from '@/components/Cards/BlogPostIdeaCard';
+import GenerateBlogPostForm from './components/GenerateBlogPostForm';
+import Modal from '@/components/Modal';
 
 const BlogPostEditor = ({ isEdit = false }) => {
   const navigate = useNavigate();
@@ -230,6 +232,30 @@ const BlogPostEditor = ({ isEdit = false }) => {
           )}
         </div>
       </div>
+      <Modal
+        isOpen={openBlogPostGenForm?.open}
+        onClose={() => {
+          setOpenBlogPostGenForm({open:false, data:null});
+        }}
+        hideHeader
+      >
+        <GenerateBlogPostForm 
+          contentParams={openBlogPostGenForm?.data || null}
+          setPostContent={(title, content) => {
+            const postInfo = openBlogPostGenForm?.data || null;
+            setPostData((prevState) => ({
+              ...prevState,
+              title: title || prevState.title,
+              content: content,
+              tags: postInfo?.tags || prevState.tags,
+              generatedByAI : true,
+            }))
+          }}
+          handleCloseForm={() => {
+            setOpenBlogPostGenForm({open : false, data: null});
+          }}
+        />
+      </Modal>
     </DashboardLayout>
   )
 }

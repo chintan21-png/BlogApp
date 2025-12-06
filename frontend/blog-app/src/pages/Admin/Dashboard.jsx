@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react'
-import DashboardLayout from "../../../components/layouts/DashboardLayout";
-import { UserContext } from '../../../context/userContext';
+import DashboardLayout from "@/components/layouts/DashboardLayout";
+import { UserContext } from '@/context/userContext';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../../utils/axiosinstance';
-import { API_PATHS } from '../../../utils/apiPaths';
+import axiosInstance from '@/utils/axiosinstance';
+import { API_PATHS } from '@/utils/apiPaths';
 import moment from "moment";
 import { LuChartLine, LuCheckCheck, LuGalleryVerticalEnd, LuHeart } from 'react-icons/lu';
-import TagInsights from '../../../components/Cards/TagInsights';
-import DashboardSummaryCard from '../../../components/Cards/DashboardSummaryCard';
-import TopPostCard from '../../../components/Cards/TopPostCard';
-import RecentCommentList from '../../../components/Cards/RecentCommentList';
+import TagInsights from '@/components/Cards/TagInsights';
+import DashboardSummaryCard from '@/components/Cards/DashboardSummaryCard';
+import TopPostCard from '@/components/Cards/TopPostCard';
+import RecentCommentList from '@/components/Cards/RecentCommentList';
 
 const Dashboard = () => {
   const { user, loading } = useContext(UserContext);
