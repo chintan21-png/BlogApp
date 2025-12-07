@@ -32,4 +32,4 @@ app.use("/api/ai", aiRoutes);
 app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server sunning on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

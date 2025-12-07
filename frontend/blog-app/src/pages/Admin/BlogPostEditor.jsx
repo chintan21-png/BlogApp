@@ -17,6 +17,10 @@ import SkeletonLoader from '@/components/Loader/SkeletonLoader';
 import BlogPostIdeaCard from '@/components/Cards/BlogPostIdeaCard';
 import GenerateBlogPostForm from './components/GenerateBlogPostForm';
 import Modal from '@/components/Modal';
+import uploadImage from '@/utils/uploadImage';
+import toast from 'react-hot-toast';
+import { getToastMessagesByType } from '@/utils/helper';
+
 
 const BlogPostEditor = ({ isEdit = false }) => {
   const navigate = useNavigate();
@@ -49,30 +53,117 @@ const BlogPostEditor = ({ isEdit = false }) => {
 
   //Generate Blog Post Idea Using AI
   const generatePostIdeas = async () => {
-    try {
-      const aiResponse = await axiosInstance.post(
-        API_PATHS.AI.GENERATE_BLOG_POST_IDEAS, 
-        {
-          topics: "React JS, Next JS, Node JS, React UI Components",
-        }
-      );
-      const generatedIdeas = aiResponse.data;
+  try {
+    setIdeaLoading(true);  
+    setError("");         
 
-      if(generatedIdeas?.length > 0) {
-        setPostIdeas(generatedIdeas);
+    const aiResponse = await axiosInstance.post(
+      API_PATHS.AI.GENERATE_BLOG_POST_IDEAS,
+      {
+        topics: "React JS, Next JS, Node JS, React UI Components",
       }
+    );
+
+   
+    const generatedIdeas =
+      aiResponse?.data?.data || aiResponse?.data || [];
+
+    if (generatedIdeas.length > 0) {
+      setPostIdeas(generatedIdeas);
+    } else {
+      setPostIdeas([]);
+      toast.error("No ideas generated. Try again.");
     }
-    catch(error) {
-      console.log("Something went wrong. Please try again.", error);
-    }
-    finally {
-      setIdeaLoading(false);
+  }
+  catch (error) {
+    console.error("AI Idea Error:", error);
+
+   
+    if (error?.response?.status === 429) {
+      toast.error("AI limit exceeded. Please wait & try again.");
+    } else {
+      toast.error("Failed to generate blog post ideas.");
     }
 
-  };
+    setPostIdeas([]);
+  }
+  finally {
+    setIdeaLoading(false); 
+  }
+};
 
   //Handle blog post publish
   const handlePublish = async (isDraft) => {
+    let coverImageUrl = "";
+
+    if(!postData.title.trim()) {
+      setError("Please enter a title");
+      return;
+    }
+
+    if(!postData.content.trim()) {
+      setError("Please enter some content");
+      return;
+    }
+
+    if(!isDraft) {
+      if(!isEdit && !postData.coverImageUrl) {
+        setError("Please select a cover image.");
+        return;
+      }
+
+      if(isEdit && !postData.coverImageUrl && !postData.coverPreview) {
+        setError("Please select a cover image.");
+        return;
+      }
+
+      if(!postData.tags.length) {
+        setError("Please add some tags.");
+        return;
+      }
+    }
+    setLoading(true);
+    setError("");
+
+    try {
+      if(postData.coverImageUrl instanceof File) {
+        const imgUploadRes = await uploadImage(postData.coverImageUrl);
+        coverImageUrl = imgUploadRes.imageUrl || "";
+      }
+      else {
+        coverImageUrl = postData.coverPreview;
+      }
+
+      const reqPayload = {
+        title: postData.title,
+        content: postData.content,
+        coverImageUrl,
+        tags: postData.tags,
+        isDraft: isDraft ? true : false,
+        generatedByAI: true,
+      };
+      const response = isEdit
+        ? await axiosInstance.put(
+          API_PATHS.POSTS.UPDATE(postData.id),
+          reqPayload
+        )
+      : await axiosInstance.post(API_PATHS.POSTS.CREATE, reqPayload);
+      if(response.data) {
+        toast.success(
+          getToastMessagesByType(
+            isDraft ? "draft" : isEdit ? "edit" : "published"
+          )
+        );
+        navigate("/admin/posts");
+      }
+    }
+    catch(error) {
+      setError("Failed to publish blog post. Please try again.")
+      console.error("Error publishing blog post:", error);
+    }
+    finally {
+      setLoading(false);
+    }
 
   };
 
