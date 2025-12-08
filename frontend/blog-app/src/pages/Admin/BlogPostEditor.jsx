@@ -20,6 +20,7 @@ import Modal from '@/components/Modal';
 import uploadImage from '@/utils/uploadImage';
 import toast from 'react-hot-toast';
 import { getToastMessagesByType } from '@/utils/helper';
+import DeleteAlertContent from '@/components/DeleteAlertContent';
 
 
 const BlogPostEditor = ({ isEdit = false }) => {
@@ -169,12 +170,42 @@ const BlogPostEditor = ({ isEdit = false }) => {
 
   //Get Post Data By slug
   const fetchPostDetailsBySlug = async () => {
+    try {
+      const response = await axiosInstance.get(
+        API_PATHS.POSTS.GET_BY_SLUG(postSlug)
+      );
+      if(response.data) {
+        const data = response.data;
+
+        setPostData((prevState) => ({
+          ...prevState,
+          id: data._id,
+          title: data.title,
+          content: data.content,
+          coverPreview: data.coverImageUrl,
+          tags: data.tags,
+          isDraft: data.isDraft,
+          generatedByAI: data.generatedByAI,
+        }));
+      }
+    }
+    catch(error) {
+      console.error("Error:", error);
+    }
 
   };
 
   //Delete Blog post
   const deletePost = async () => {
-
+    try {
+      await axiosInstance.delete(API_PATHS.POSTS.DELETE(postData.id));
+      toast.success("Blog Post Deleted Successfully");
+      setOpenDeleteAlert(false);
+      navigate("/admin/posts");
+    }
+    catch(error) {
+      console.error("Error deleting blog post:", error);
+    }
   };
 
   useEffect(() => {
@@ -347,6 +378,38 @@ const BlogPostEditor = ({ isEdit = false }) => {
           }}
         />
       </Modal>
+     {openDeleteAlert && (
+        <Modal
+          isOpen={openDeleteAlert}
+          onClose={() => {
+            setOpenDeleteAlert(false);
+          }}
+          title="Delete Alert"
+          size="sm"
+        >
+          <div className="p-4">
+            <p className="text-[14px] text-gray-700 mb-6">
+              Are you sure you want to delete this blog post?
+            </p>
+            <div className="flex justify-end gap-3 mt-4">
+              <button
+                type="button"
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                onClick={() => setOpenDeleteAlert(false)}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                className="px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors"
+                onClick={deletePost}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )};
     </DashboardLayout>
   )
 }
