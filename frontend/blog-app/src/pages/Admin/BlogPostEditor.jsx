@@ -20,8 +20,7 @@ import Modal from '@/components/Modal';
 import uploadImage from '@/utils/uploadImage';
 import toast from 'react-hot-toast';
 import { getToastMessagesByType } from '@/utils/helper';
-import DeleteAlertContent from '@/components/DeleteAlertContent';
-
+//import DeleteAlertContent from '@/components/DeleteAlertContent';
 
 const BlogPostEditor = ({ isEdit = false }) => {
   const navigate = useNavigate();
