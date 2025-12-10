@@ -113,7 +113,7 @@ const BlogPosts = () => {
                 key={post._id}
                 title={post.title}
                 imgUrl={post.coverImageUrl}
-                updateOn={
+                updatedOn={
                   post.updatedAt
                     ? moment(post.updatedAt).format("Do MMM YYYY")
                     : "-"
