@@ -411,6 +411,6 @@ const BlogPostEditor = ({ isEdit = false }) => {
       )};
     </DashboardLayout>
   )
-}
+};
 
 export default BlogPostEditor

@@ -6,7 +6,9 @@ import { useContext } from 'react';
 import { useState } from 'react';
 import { comment } from '@uiw/react-md-editor';
 import moment from 'moment';
-import CommentReplyInput from '@/Inputs/CommentReplyInput';
+import CommentReplyInput from '../Inputs/CommentReplyInput';
+import axiosInstance from '../../utils/axiosinstance';
+import { API_PATHS } from '../../utils/apiPaths';
 
 const CommetInfoCard = ({
     commentId,
@@ -34,8 +36,25 @@ const CommetInfoCard = ({
 
     //Add Reply
     const handleAddReply = async() => {
+        try {
+            console.log("post", post);
 
-    };
+            const response = await axiosInstance.post(
+                API_PATHS.COMMENTS.ADD(post._id),
+                {
+                    content: replyText,
+                    parentComment: commentId,
+                }
+            );
+            toast.success("Reply added successfully!");
+            setReplyText("");
+            setShowReplyForm(false);
+            getAllComments();
+        }
+        catch(error) {
+            console.error("Error adding reply:", error);
+        }
+     };
   return (
     <div className={`bg-white p-3 rounded-lg cursor-pointer group ${isSubReply ? 'mb-1' : 'mb-4'}`}>
         <div className='grid grid-cols-12 gap-3'>
