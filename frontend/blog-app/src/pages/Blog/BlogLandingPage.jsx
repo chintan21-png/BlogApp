@@ -5,6 +5,8 @@ import { LuGalleryVerticalEnd, LuLoaderCircle } from 'react-icons/lu';
 import axiosInstance from '@/utils/axiosinstance';
 import { API_PATHS } from '@/utils/apiPaths';
 import moment from 'moment';
+import FeaturedBlogPost from './components/FeaturedBlogPost';
+import BlogPostSummaryCard from './components/BlogPostSummaryCard';
 
 const BlogLandingPage = () => {
   const navigate = useNavigate();
@@ -59,7 +61,7 @@ const BlogLandingPage = () => {
       <div className='grid grid-cols-12 gap-5'>
         <div className='col-span-12 md:col-span-9'>
           {blogPostList.length > 0 && (
-            <FeaturedBlogPost 
+            <FeaturedBlogPost
               title={blogPostList[0].title}
               coverImageUrl={blogPostList[0].coverImageUrl}
               description={blogPostList[0].content}
@@ -75,7 +77,27 @@ const BlogLandingPage = () => {
             />
           )}
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mt-8'>
-
+            {blogPostList.length > 0 && 
+              blogPostList
+                .slice(1)
+                .map((item) => (
+                  <BlogPostSummaryCard
+                    key={item._id}
+                    title={item.title}
+                    coverImageUrl={item.coverImageUrl}
+                    description={item.content}
+                    tags={item.tags}
+                    updatedOn={
+                      item.updatedAt
+                        ? moment(item.updatedAt).format("Do MMM YYYY")
+                        : "-"
+                    }
+                    authorName={item.author.name}
+                    authProfileImg={item.author.profileImageUrl}
+                    onClick={() => handleClick(item)}
+                  />
+                ))
+            }
           </div>
 
           {page < totalPages && (

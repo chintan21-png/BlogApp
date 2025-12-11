@@ -1,9 +1,9 @@
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import { Toaster } from "react-hot-toast";
-import BlogLandingPage from "./pages/Blog/components/BlogLandingPage";
-import BlogPostView from "./pages/Blog/components/BlogPostView";
-import PostByTags from "./pages/Blog/components/PostByTags";
-import SearchPosts from "./pages/Blog/components/SearchPosts";
+import BlogLandingPage from "./pages/Blog/BlogLandingPage";
+import BlogPostView from "./pages/Blog/BlogPostView";
+import PostByTags from "./pages/Blog/PostByTags";
+import SearchPosts from "./pages/Blog/SearchPosts";
 import AdminLogin from "./pages/Admin/AdminLogin";
 import PrivateRoute from "./routes/PrivateRoute";
 import Dashboard from "./pages/Admin/Dashboard";
