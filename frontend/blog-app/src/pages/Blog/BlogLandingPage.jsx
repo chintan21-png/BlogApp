@@ -7,6 +7,7 @@ import { API_PATHS } from '@/utils/apiPaths';
 import moment from 'moment';
 import FeaturedBlogPost from './components/FeaturedBlogPost';
 import BlogPostSummaryCard from './components/BlogPostSummaryCard';
+import TrendingPostsSection from './components/TrendingPostsSection';
 
 const BlogLandingPage = () => {
   const navigate = useNavigate();
@@ -116,6 +117,9 @@ const BlogLandingPage = () => {
               </button>
             </div>
           )}
+        </div>
+        <div className='col-span-12 md:col-span-3'>
+          <TrendingPostsSection />
         </div>
       </div>
     </BlogLayout>
