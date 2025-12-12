@@ -10,6 +10,9 @@ import axiosInstance from '@/utils/axiosinstance'
 import { API_PATHS } from '@/utils/apiPaths'
 import BlogLayout from "@/components/layouts/BlogLayout/BlogLayout";
 import moment from 'moment'
+import { sanitizeMarkdown } from '@/utils/helper'
+import MarkdownContent from './components/MarkdownContent'
+import SharePost from './components/SharePost'
 const BlogPostView = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -142,6 +145,12 @@ const BlogPostView = () => {
                 alt={blogPostData.title}
                 className='w-full h-96  object-cover mb-6 rounded-lg'
               ></img>
+              <div className=''>
+                <MarkdownContent
+                  content={sanitizeMarkdown(blogPostData?.content || "")}
+                />
+                <SharePost title={blogPostData.title}/>
+              </div>
             </div>
             <div className='col-span-12 md:col-span-4'>
               <TrendingPostsSection />
