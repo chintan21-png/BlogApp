@@ -150,6 +150,39 @@ const BlogPostView = () => {
                   content={sanitizeMarkdown(blogPostData?.content || "")}
                 />
                 <SharePost title={blogPostData.title}/>
+                <div className='bg-gray-50 p-4 rounded-lg'>
+                  <div className='flex items-center justify-between mb-4'>
+                    <h4 className='text-lg font-semibold'>Comments</h4>
+                    <button
+                      className='flex items-center justify-center gap-4 bg-linear-to-r from-sky-500 to-cyan-400 text-xs font-semibold text-white px-5 py-2 rounded-full hover:bg-black hover:text-white cursor-pointer'
+                      onClick={() => {
+                        if(!user) {
+                          setOpenAuthForm(true);
+                          return;
+                        }
+                        setShowReplyForm(true);
+                      }}
+                    >
+                      Add Comment
+                    </button>
+                  </div>
+                  {showReplyForm && (
+                    <div className='bg-white pt-1 pb-5 pr-8 rounded-lg mb-8'>
+                      <CommentReplyInput
+                        user={user}
+                        authorName={user.name}
+                        content={""}
+                        replyText={replyText}
+                        setReplyText={setReplyText}
+                        handleAddReply={handleAddReply}
+                        handleCancelReply={handleCancelReply}
+                        disableAutoGen
+                        type="new"
+                      />
+                    </div>
+                  )}
+                </div>
+                
               </div>
             </div>
             <div className='col-span-12 md:col-span-4'>
