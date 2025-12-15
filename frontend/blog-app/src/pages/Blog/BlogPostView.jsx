@@ -14,6 +14,7 @@ import { sanitizeMarkdown } from '@/utils/helper'
 import MarkdownContent from './components/MarkdownContent'
 import SharePost from './components/SharePost'
 import CommentInfoCard from './components/CommentInfoCard'
+import Drawer from '@/components/Drawer'
 const BlogPostView = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -67,7 +68,32 @@ const BlogPostView = () => {
 
   //Generate Blog Post summary
   const generateBlogPostSummary = async () => {
+    try {
+      setErrorMsg("");
+      setSummaryContent(null);
 
+      setIsLoading(true);
+      setOpenSummarizeDrawer(true);
+
+      const response = await axiosInstance.post(
+        API_PATHS.AI.GENERATE_POST_SUMMARY,
+        {
+          content: blogPostData.content || "",
+        }
+      );
+
+      if(response.data) {
+        setSummaryContent(response.data);
+      }
+    }
+    catch(error) {
+      setSummaryContent(null);
+      setErrorMsg("Failed to generate summary, Try again later");
+      console.error("Error", error);
+    }
+    finally{
+      setIsLoading(false);
+    }
   };
 
   //Increment views
@@ -229,6 +255,21 @@ const BlogPostView = () => {
               <TrendingPostsSection />
             </div>
           </div>
+          <Drawer
+            isOpen={openSummarizeDrawer}
+            onClose={() => setOpenSummarizeDrawer(false)}
+            title={!isLoading && summaryContent?.title}
+          >
+            {errorMsg && (
+              <p className='flex gap-2 text-sm text-amber-600 font-medium'>
+                <LuCircleAlert className='mt-1'/> {errorMsg}
+              </p>
+            )}
+            {isLoading && <SkeletonLoader />}
+            {!isLoading && summaryContent && (
+              <MarkdownContent content={summaryContent?.summary || ""}/>
+            )}
+          </Drawer>
         </>
       )}
     </BlogLayout>

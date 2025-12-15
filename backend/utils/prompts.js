@@ -20,40 +20,41 @@ Important: Do NOT add any extra text outside the JSON format. Only return valid 
     `;
 
 function generateReplyPrompt(comment) {
-    const authorName = comment.author?.name || "User";
-    const content = comment.content;
+  const authorName = comment.author?.name || "User";
+  const content = comment.content;
 
-    return `You're replying to a blog comment by ${authorName}. The comment says:
+  return `You're replying to a blog comment by ${authorName}. The comment says:
     "${content}"
     
-    Write a thoughful, concise, and relevant reply to this comment.`;   
+    Write a thoughful, concise, and relevant reply to this comment.`;
 }
 
-const blogSummaryPrompt = (blogContent) => (`
-    You are an AI assistant that summarizes blog posts.
+const blogSummaryPrompt = (blogContent) => `
+You are a backend JSON API.
 
-    Instructions:
-    - Read the blog post content below.
-    - Generate a short, catchy, SEO-friendly title (max 12 words).
-    - Write a clear, engaging summary of about 300 words.
-    - At the end of the summary, add a markdown section titled **## What You'll Learn**.
-    - Under that heading, list 3–5 key takeaways or skills the reader will learn in **bullet points** using markdown (\`-\`).
+RULES (VERY IMPORTANT):
+- Return ONLY valid JSON
+- Do NOT use markdown formatting
+- Do NOT use raw newlines
+- Use \\n for line breaks inside strings
+- Escape all quotes properly
 
-    Return the result in **valid JSON** with the following structure:
+JSON format:
+{
+  "title": "string",
+  "summary": "string"
+}
 
-    {
-        "title": "Short SEO-friendly title",
-        "summary": "300-word summary with a markdown section for What You'll Learn"
-    }
+The summary must:
+- Be about 300 words
+- End with a section titled: What You'll Learn
+- Include 3 to 5 bullet points using hyphens (-)
 
-    Only return valid JSON. Do not include markdown or code blocks around the JSON.
-
-    Blog Post Content:
-    ${blogContent}
-    `);
-
+Blog content:
+${blogContent}
+`;
 module.exports = {
-    blogPostIdeasPrompt,
-    generateReplyPrompt,
-    blogSummaryPrompt,
+  blogPostIdeasPrompt,
+  generateReplyPrompt,
+  blogSummaryPrompt,
 };
