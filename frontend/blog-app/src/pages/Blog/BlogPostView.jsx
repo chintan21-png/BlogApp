@@ -91,7 +91,22 @@ const BlogPostView = () => {
   //Add reply
 
   const handleAddReply = async () => {
-
+    try {
+        await axiosInstance.post(
+        API_PATHS.COMMENTS.ADD(blogPostData._id),
+        {
+          content: replyText,
+          parentComment:"",
+        }
+      );
+      toast.success("Reply added successfully!");
+      setReplyText("");
+      setShowReplyForm(false);
+      fetchCommentByPostId(blogPostData._id);
+    }
+    catch(error) {
+      console.error("Error adding reply:", error);
+    }
   };
 
   useEffect(() => {
