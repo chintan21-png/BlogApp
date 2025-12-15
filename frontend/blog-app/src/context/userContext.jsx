@@ -1,4 +1,3 @@
-// UserProvider.jsx - Remove navigation hooks
 import React, { createContext, useState, useEffect } from 'react';
 import axiosInstance from '../utils/axiosinstance';
 import { API_PATHS } from '../utils/apiPaths';
@@ -12,8 +11,7 @@ const UserProvider = ({ children }) => {
 
     useEffect(() => {
         const accessToken = localStorage.getItem("token");
-        
-        // If no token exists, skip fetching user
+
         if (!accessToken) {
             setLoading(false);
             return;
@@ -24,19 +22,24 @@ const UserProvider = ({ children }) => {
                 const response = await axiosInstance.get(API_PATHS.AUTH.GET_PROFILE);
                 setUser(response.data);
             } catch (error) {
-                console.error("User not authenticated", error);
                 clearUser();
             } finally {
                 setLoading(false);
             }
         };
-        
+
         fetchUser();
     }, []);
 
     const updateUser = (userData) => {
+        if (!userData) {
+            clearUser();
+            return;
+        }
+
         setUser(userData);
-        if (userData.token) {
+
+        if (userData?.token) {
             localStorage.setItem("token", userData.token);
         }
     };
@@ -47,14 +50,13 @@ const UserProvider = ({ children }) => {
     };
 
     return (
-        <UserContext.Provider value={{ 
-            user, 
-            setUser: updateUser,
-            loading, 
-            updateUser, 
-            clearUser, 
-            openAuthForm, 
-            setOpenAuthForm 
+        <UserContext.Provider value={{
+            user,
+            updateUser,
+            clearUser,
+            loading,
+            openAuthForm,
+            setOpenAuthForm
         }}>
             {children}
         </UserContext.Provider>

@@ -13,6 +13,7 @@ import moment from 'moment'
 import { sanitizeMarkdown } from '@/utils/helper'
 import MarkdownContent from './components/MarkdownContent'
 import SharePost from './components/SharePost'
+import CommentInfoCard from './components/CommentInfoCard'
 const BlogPostView = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -181,6 +182,30 @@ const BlogPostView = () => {
                       />
                     </div>
                   )}
+                  {comments?.length > 0 && 
+                    comments.map((comment) => (
+                      <CommentInfoCard
+                        key={comment._id}
+                        commentId={comment._id || null}
+                        authorName={comment.author.name}
+                        authorPhoto={comment.author.profileImageUrl}
+                        content={comment.content}
+                        updatedOn={
+                          comment.updatedAt
+                            ? moment(comment.updatedAt).format("Do MMM YYYY")
+                            : "-"
+                        }
+                        post={comment.post}
+                        replies={comment.replies || []}
+                        getAllComments={() => fetchCommentByPostId(blogPostData._id)
+                        }
+                        onDelete={(commentId) => setOpenDeleteAlert({
+                          open: true,
+                          data: commentId || comment._id,
+                        })}
+                      />
+                    ))  
+                  }
                 </div>
                 
               </div>
