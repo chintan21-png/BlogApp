@@ -100,7 +100,7 @@ const BlogPostView = () => {
   const incrementViews = async (postId) => {
     if(!postId) return;
     try {
-      const response = await axiosInstance.post(
+        await axiosInstance.post(
         API_PATHS.POSTS.INCREMENT_VIEW(postId)
       );
     }
