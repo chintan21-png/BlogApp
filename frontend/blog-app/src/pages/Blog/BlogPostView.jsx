@@ -15,6 +15,7 @@ import MarkdownContent from './components/MarkdownContent'
 import SharePost from './components/SharePost'
 import CommentInfoCard from './components/CommentInfoCard'
 import Drawer from '@/components/Drawer'
+import LikeCommentButton from './components/LikeCommentButton'
 const BlogPostView = () => {
   const { slug } = useParams();
   const navigate = useNavigate();
@@ -250,6 +251,11 @@ const BlogPostView = () => {
                 </div>
                 
               </div>
+              <LikeCommentButton 
+                postId={blogPostData._id || ""}
+                likes={blogPostData.likes || 0}
+                comments={comments?.length || 0}
+              />
             </div>
             <div className='col-span-12 md:col-span-4'>
               <TrendingPostsSection />

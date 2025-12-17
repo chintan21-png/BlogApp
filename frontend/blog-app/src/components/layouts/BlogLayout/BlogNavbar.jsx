@@ -10,6 +10,7 @@ import ProfileInfoCard from '../../Cards/ProfileInfoCard';
 import Login from '../../Auth/Login';
 import SignUp from "../../Auth/SignUp";
 import Modal from '../../Modal';
+import SearchBarPopuop from '../../../pages/Blog/components/SearchBarPopuop';
 
 const BlogNavbar = ({activeMenu}) => {
     const {user, setOpenAuthForm} = useContext(UserContext);
@@ -109,6 +110,7 @@ const BlogNavbar = ({activeMenu}) => {
     </div>
 
     <AuthModal />
+    <SearchBarPopuop isOpen={openSearchBar} setIsOpen={setOpenSearchBar} />
     </>
   )
 }
