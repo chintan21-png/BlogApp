@@ -8,7 +8,7 @@ const BlogPostSummaryCard = ({
     tags,
     updatedOn,
     authorName,
-    authPorfileImg,
+    authProfileImg,
     onClick,
 }) => {
     const navigate = useNavigate()
@@ -40,7 +40,7 @@ const BlogPostSummaryCard = ({
             </div>
             <div className='flex items-center'>
                 <img
-                    src={authPorfileImg}
+                    src={authProfileImg}
                     alt={authorName}
                     className='w-8 h-8 rounded-full mr-2'
                 ></img>

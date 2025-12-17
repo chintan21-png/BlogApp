@@ -61,7 +61,7 @@ const PostByTags = () => {
                         : "-" 
                     }
                     authorName={item.author.name}
-                    authPorfileImg={item.author.profileImageUrl}
+                    authProfileImg={item.author.profileImageUrl}
                     onClick={() => handleClick(item)}
                   />
                 ))

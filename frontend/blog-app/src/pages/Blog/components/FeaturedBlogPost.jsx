@@ -7,7 +7,7 @@ const FeaturedBlogPost = ({
     tags,
     updatedOn,
     authorName,
-    authPorfileImg,
+    authProfileImg,
     onClick,
 }) => {
   return (
@@ -39,7 +39,7 @@ const FeaturedBlogPost = ({
           </div>
           <div className='flex items-center'>
             <img
-              src={authPorfileImg}
+              src={authProfileImg}
               alt={authorName}
               className='w-8 h-8 rounded-full mr-2'
             ></img>
