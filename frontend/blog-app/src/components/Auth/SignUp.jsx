@@ -5,7 +5,7 @@ import Input from '../../components/Inputs/Input';
 import axiosInstance from '../../utils/axiosinstance';
 import { API_PATHS } from '../../utils/apiPaths';
 import { UserContext } from '../../context/userContext';
-import uploadImage from '../../utils/uploadimage';
+import uploadImage from '../../utils/uploadImage';
 import ProfilePhotoSelector from '../Inputs/ProfilePhotoSelector';
 import AUTH_IMG from "../../assets/auth-img.jpg";
 
