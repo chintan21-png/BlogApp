@@ -37,6 +37,7 @@ app.use("/api/posts", blogPostRoutes);
 app.use("/api/comments", commentRoutes);
 app.use("/api/dashboard-summary", dashboardRoutes);
 app.use("/api/ai", aiRoutes);
+app.use("/health", require("./routes/health"));
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads"), {}));
 
